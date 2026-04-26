@@ -148,6 +148,32 @@ curl -X POST "http://127.0.0.1:8000/generate-reply" ^
 | Missing `OPENAI_API_KEY` | 503 |
 | OpenAI rate limit / connection / API error | 502 |
 
+## Example API Test
+
+Below is a realistic **POST `/generate-reply`** payload you can paste into Swagger UI’s request body or send with **curl** / **Postman**. With a valid `OPENAI_API_KEY`, the server returns a single JSON object whose **`generated_reply`** field holds the full draft (wording varies each call because the model is non-deterministic).
+
+**Example request JSON**
+
+```json
+{
+  "sender_name": "John Smith",
+  "sender_email": "john@example.com",
+  "email_subject": "Question about your AI automation services",
+  "email_body": "Hi, I am interested in your AI automation services. Can you tell me how you can help my small business save time with email replies?",
+  "reply_tone": "professional"
+}
+```
+
+**Example response JSON** (shape is fixed; `generated_reply` text is illustrative and truncated)
+
+```json
+{
+  "generated_reply": "Dear John, thank you for your inquiry about our AI automation services..."
+}
+```
+
+This example demonstrates how the backend accepts simulated email input and returns an AI-generated professional reply draft.
+
 ## Roadmap ideas
 
 - Streaming responses for long replies.
