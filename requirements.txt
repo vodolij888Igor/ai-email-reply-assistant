@@ -1,0 +1,17 @@
+# Web framework
+fastapi>=0.109.0,<1.0.0
+
+# ASGI server (runs FastAPI in development/production)
+uvicorn[standard]>=0.27.0,<1.0.0
+
+# Request/response validation (included with FastAPI, pinned for reproducibility)
+pydantic>=2.5.0,<3.0.0
+
+# Required by Pydantic for EmailStr fields
+email-validator>=2.1.0,<3.0.0
+
+# Load environment variables from a .env file (for future OpenAI API keys)
+python-dotenv>=1.0.0,<2.0.0
+
+# OpenAI client — listed for the planned stack; not used in placeholder mode yet
+openai>=1.12.0,<2.0.0
