@@ -1,12 +1,12 @@
 # AI Email Reply Assistant
 
-A small **FastAPI** backend for a portfolio project aimed at **Junior AI Automation Engineer** and **AI Agent Developer** roles. The service accepts **simulated email input** (no Gmail or OAuth in this version) and returns a **draft reply** you could later connect to a real LLM or mailbox workflow.
+A small **FastAPI** backend for a portfolio project aimed at **Junior AI Automation Engineer** and **AI Agent Developer** roles. The service accepts **simulated email input** (no Gmail or OAuth in this version) and returns a **draft reply** produced by the **OpenAI API** (`gpt-4o-mini`).
 
 ## What it does
 
-- Exposes a JSON API with one main action: **generate a reply** from sender details, subject, body, and a desired **tone**.
-- Uses **Pydantic** schemas for clear request/response contracts and automatic OpenAPI docs.
-- Ships with **placeholder** reply logic so the project runs without API keys or paid services. The OpenAI client is listed in dependencies for when you swap in a real call.
+- Exposes **POST `/generate-reply`**: send sender fields, subject, body, and a desired **tone**; receive **`generated_reply`** text from OpenAI.
+- Uses **Pydantic** schemas for request/response validation and automatic OpenAPI (Swagger) documentation.
+- Loads secrets from a **`.env`** file via **python-dotenv** (no API keys in code).
 
 ## Tech stack
 
@@ -16,8 +16,8 @@ A small **FastAPI** backend for a portfolio project aimed at **Junior AI Automat
 | FastAPI | HTTP API framework |
 | Uvicorn | ASGI server |
 | Pydantic | Validation / serialization |
-| python-dotenv | Load `.env` (e.g. future `OPENAI_API_KEY`) |
-| OpenAI (optional next step) | Listed in `requirements.txt` for a future real integration |
+| python-dotenv | Load `OPENAI_API_KEY` from `.env` |
+| OpenAI Python SDK | Chat Completions (`gpt-4o-mini`) |
 
 ## Project layout
 
@@ -30,12 +30,40 @@ A small **FastAPI** backend for a portfolio project aimed at **Junior AI Automat
 └── app/
     ├── main.py                 # FastAPI app and routes
     ├── services/
-    │   └── ai_service.py       # Reply generation (placeholder today)
+    │   └── ai_service.py       # OpenAI chat completion + error handling
     └── schemas/
         └── email_schema.py     # Request/response models
 ```
 
-## Quick start
+## Configuration: create a `.env` file
+
+This project **does not** ship a real `.env` file (and you must not commit secrets).
+
+1. In the **project root** (same folder as `requirements.txt`), copy the example file:
+
+   **Windows (PowerShell)**
+
+   ```powershell
+   Copy-Item .env.example .env
+   ```
+
+   **macOS / Linux**
+
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Open **`.env`** in an editor and set your key:
+
+   ```text
+   OPENAI_API_KEY=sk-...your_real_key...
+   ```
+
+   The value must match the key from your [OpenAI API keys](https://platform.openai.com/api-keys) page.
+
+3. Keep **`.env` out of git** — it is already ignored via `.gitignore`.
+
+## Quick start: install and run
 
 1. **Create a virtual environment** (recommended):
 
@@ -61,13 +89,37 @@ A small **FastAPI** backend for a portfolio project aimed at **Junior AI Automat
    pip install -r requirements.txt
    ```
 
-4. **Run the server** from the project root:
+4. **Configure `.env`** as described above so `OPENAI_API_KEY` is set.
+
+5. **Run the server** from the project root:
 
    ```bash
    uvicorn app.main:app --reload
    ```
 
-5. Open **http://127.0.0.1:8000/docs** to try **POST `/generate-reply`** interactively.
+6. Open **http://127.0.0.1:8000/docs** in your browser (Swagger UI).
+
+## Testing `POST /generate-reply` in Swagger UI
+
+1. Start the app with `uvicorn` (see above).
+2. Go to **http://127.0.0.1:8000/docs**.
+3. Open the **`POST /generate-reply`** section.
+4. Click **Try it out**.
+5. Edit the JSON example (or use defaults), for example:
+
+   - `sender_name`, `sender_email`, `email_subject`, `email_body`
+   - `reply_tone`: e.g. `professional`, `friendly`, or `brief`
+
+6. Click **Execute**.
+7. Check the response: **`generated_reply`** should contain the model’s draft. If something fails (missing key, rate limit, network), the **HTTP status** and **detail** message explain the issue.
+
+You can also use **curl** (adjust line breaks for your shell):
+
+```bash
+curl -X POST "http://127.0.0.1:8000/generate-reply" ^
+  -H "Content-Type: application/json" ^
+  -d "{\"sender_name\":\"Alex\",\"sender_email\":\"alex@example.com\",\"email_subject\":\"Project timeline\",\"email_body\":\"Can we move the deadline to Friday?\",\"reply_tone\":\"professional\"}"
+```
 
 ## API
 
@@ -87,27 +139,20 @@ A small **FastAPI** backend for a portfolio project aimed at **Junior AI Automat
 
 | Field | Type | Description |
 |--------|------|-------------|
-| `generated_reply` | string | Draft reply text |
+| `generated_reply` | string | Draft reply text from OpenAI |
 
-**Example**
+**Errors**
 
-```bash
-curl -X POST "http://127.0.0.1:8000/generate-reply" ^
-  -H "Content-Type: application/json" ^
-  -d "{\"sender_name\":\"Alex\",\"sender_email\":\"alex@example.com\",\"email_subject\":\"Project timeline\",\"email_body\":\"Can we move the deadline to Friday?\",\"reply_tone\":\"professional\"}"
-```
-
-*(Use line continuation appropriate to your shell on non-Windows systems.)*
-
-## Environment variables
-
-Copy `.env.example` to `.env` when you add a real OpenAI integration. The placeholder implementation does not require a key.
+| Situation | Typical HTTP status |
+|-----------|---------------------|
+| Missing `OPENAI_API_KEY` | 503 |
+| OpenAI rate limit / connection / API error | 502 |
 
 ## Roadmap ideas
 
-- Replace `generate_reply_placeholder` in `app/services/ai_service.py` with the OpenAI API using `OPENAI_API_KEY` from `.env`.
-- Add streaming responses, conversation history, or guardrails for PII.
-- Optional: Gmail read-only or send flows behind explicit user consent.
+- Streaming responses for long replies.
+- Conversation history or thread id.
+- Optional Gmail integration with explicit user consent.
 
 ## License
 
