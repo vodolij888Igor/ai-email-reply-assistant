@@ -180,6 +180,36 @@ The screenshot below shows a successful POST /generate-reply test in FastAPI Swa
 
 ![Swagger UI successful API response](docs/images/swagger-code-200-wide.png)
 
+## Skills Demonstrated
+
+- Building a FastAPI backend API
+- Creating a POST endpoint for AI-powered automation
+- Using Pydantic models for request and response validation
+- Integrating the OpenAI API with Python
+- Managing API keys securely with `.env` files
+- Testing APIs with Swagger UI
+- Using Git and GitHub for version control
+- Writing clear project documentation
+
+## Security Notes
+
+- The real `.env` file is ignored by Git and must never be committed.
+- API keys should be stored only in local environment variables or secure deployment secrets.
+- `.env.example` is included only as a safe template.
+
+## Possible Improvements
+
+- Connect to Gmail API or Outlook API
+- Add user authentication
+- Store generated replies in a database
+- Add a simple frontend dashboard
+- Add deployment to Render, Railway, or another cloud platform
+- Add unit tests
+
+## Project Status
+
+Current version: working portfolio MVP with real OpenAI API integration.
+
 ## Roadmap ideas
 
 - Streaming responses for long replies.
