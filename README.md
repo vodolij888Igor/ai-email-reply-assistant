@@ -174,6 +174,12 @@ Below is a realistic **POST `/generate-reply`** payload you can paste into Swagg
 
 This example demonstrates how the backend accepts simulated email input and returns an AI-generated professional reply draft.
 
+## Screenshot
+
+The screenshot below shows a successful POST /generate-reply test in FastAPI Swagger UI.
+
+![Swagger UI successful API response](docs/images/swagger-code-200-wide.png)
+
 ## Roadmap ideas
 
 - Streaming responses for long replies.
