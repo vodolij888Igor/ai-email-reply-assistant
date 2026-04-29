@@ -99,6 +99,15 @@ This project **does not** ship a real `.env` file (and you must not commit secre
 
 6. Open **http://127.0.0.1:8000/docs** in your browser (Swagger UI).
 
+## Running Tests
+
+Run tests from the project root:
+
+```bash
+pip install -r requirements.txt
+pytest
+```
+
 ## Testing `POST /generate-reply` in Swagger UI
 
 1. Start the app with `uvicorn` (see above).
