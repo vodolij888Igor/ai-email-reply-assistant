@@ -289,6 +289,18 @@ JSON response: generated_reply
 - It is intended as a **clean local API demo** you can run and extend.
 - **Future versions** could add Gmail integration, user accounts, database storage, deployment, and a frontend dashboard.
 
+## Quality Checklist
+
+- [x] API endpoint tested with Swagger UI
+- [x] Automated tests added with pytest
+- [x] OpenAI calls mocked in tests
+- [x] Environment variables handled with `.env`
+- [x] `.env` excluded from GitHub
+- [x] API usage examples included
+- [x] Architecture documented
+- [x] Limitations documented
+- [x] Project pushed to GitHub
+
 ## Roadmap ideas
 
 - Streaming responses for long replies.
