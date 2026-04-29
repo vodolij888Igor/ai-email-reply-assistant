@@ -189,6 +189,40 @@ The screenshot below shows a successful POST /generate-reply test in FastAPI Swa
 
 ![Swagger UI successful API response](docs/images/swagger-code-200-wide.png)
 
+## API Usage Examples
+
+Use the examples below to test `POST /generate-reply` outside Swagger UI.
+
+**cURL example**
+
+```bash
+curl -X POST "http://127.0.0.1:8000/generate-reply" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "sender_name": "Emma Rodriguez",
+    "sender_email": "emma.rodriguez@example.com",
+    "email_subject": "Request for AI email workflow consultation",
+    "email_body": "Hello, I run a small online store and spend a lot of time answering similar customer emails. Can you explain how your AI automation services could help me respond faster while keeping replies professional?",
+    "reply_tone": "professional"
+  }'
+```
+
+**Example successful JSON response**
+
+```json
+{
+  "generated_reply": "..."
+}
+```
+
+**Postman quick test**
+
+- Method: `POST`
+- URL: `http://127.0.0.1:8000/generate-reply`
+- Headers: `Content-Type: application/json`
+- Body: `raw` JSON
+- Send request and check `generated_reply` in the response body
+
 ## Skills Demonstrated
 
 - Building a FastAPI backend API
