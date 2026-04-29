@@ -253,6 +253,42 @@ curl -X POST "http://127.0.0.1:8000/generate-reply" \
 
 Current version: working portfolio MVP with real OpenAI API integration.
 
+## Architecture
+
+This repository follows a small, layered layout that keeps HTTP concerns separate from AI integration and configuration.
+
+- The **FastAPI** app exposes a single main action: **`POST /generate-reply`**.
+- **Pydantic** schemas validate incoming JSON and shape the JSON response.
+- A **service layer** (`app/services/ai_service.py`) holds OpenAI reply generation logic, so the route stays thin.
+- **Environment variables** (including `OPENAI_API_KEY`) are loaded from a **`.env`** file via **python-dotenv** at startup.
+- **Swagger UI** at `/docs` provides interactive API documentation and manual testing.
+- **Automated tests** mock the AI layer and assert HTTP status codes and response shape without calling OpenAI or requiring a real API key.
+
+**Request flow (high level)**
+
+```text
+Client / Swagger / Postman
+        ↓
+FastAPI route: POST /generate-reply
+        ↓
+Pydantic validation
+        ↓
+AI service layer
+        ↓
+OpenAI API
+        ↓
+JSON response: generated_reply
+```
+
+## Limitations
+
+- This is a **backend portfolio project**, not a full email client.
+- It does **not** connect to **Gmail** or **Outlook** yet.
+- It does **not** store emails or replies in a **database**.
+- It does **not** include **authentication** yet.
+- It is intended as a **clean local API demo** you can run and extend.
+- **Future versions** could add Gmail integration, user accounts, database storage, deployment, and a frontend dashboard.
+
 ## Roadmap ideas
 
 - Streaming responses for long replies.
