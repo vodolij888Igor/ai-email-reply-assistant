@@ -1,5 +1,7 @@
 # AI Email Reply Assistant
 
+[![Tests](https://github.com/vodolij888Igor/ai-email-reply-assistant/actions/workflows/tests.yml/badge.svg)](https://github.com/vodolij888Igor/ai-email-reply-assistant/actions/workflows/tests.yml)
+
 A small **FastAPI** backend for a portfolio project aimed at **Junior AI Automation Engineer** and **AI Agent Developer** roles. The service accepts **simulated email input** (no Gmail or OAuth in this version) and returns a **draft reply** produced by the **OpenAI API** (`gpt-4o-mini`).
 
 ## What it does
